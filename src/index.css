@@ -17,6 +17,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Caracteristicas generales
+@layer base {
+  p {
+    @apply mb-3
+  }
+}*/
+
 a {
   font-weight: 500;
   color: #646cff;
