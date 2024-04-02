@@ -1,7 +1,7 @@
 /*import { useState } from 'react'*/
 /*import reactLogo from './assets/react.svg'
 import './App.css'*/
-
+import React, { useState } from "react";
 import Search from './components/search'
 import Filters from './components/filters'
 import Cards from './components/cards'
@@ -9,9 +9,51 @@ import Button from './components/button'
 import Pagination from './components/pagination'
 import { Icon } from '@iconify/react'
 import imagen from './assets/rick.png'
-
+import { useQuery, gql } from "@apollo/client";
 
 function App() {
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const GET_CHARACTERS = gql`
+  query Characters($filter: FilterCharacter, $page: Int) {
+    characters(filter: $filter, page: $page) {
+      info {
+        count
+        pages
+        next
+        prev
+      }
+      results {
+        id
+        name
+        status
+        species
+        gender
+        type
+        location {
+          id
+          name
+        }
+        origin {
+          id
+          name
+          dimension
+        }
+        image
+      }
+    }
+  }
+`;
+
+  const { loading, error, data } = useQuery(GET_CHARACTERS, {
+    variables: {
+      filter: { },
+      page: 1,
+    },
+  });
+  console.log(data);
+  console.log(searchQuery);
 
   return (
     <>
@@ -24,7 +66,9 @@ function App() {
         <div className='columns-1 w-auto h-auto mt-5 mb-10 p-5 h-auto flex justify-center'> 
           <img alt="gallery" className="w-1/2 h-auto" src={imagen}/>
         </div>
-        <Search />
+      
+        <Search setSearchQuery= {setSearchQuery} />
+
         <div className='columns-1 w-auto h-auto mt-5 mb-10 p-5 h-auto flex justify-center'>
           <Filters />
           <Filters />
